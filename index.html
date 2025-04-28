@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomberman Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Scoreboard -->
+        <div id="scoreboard">
+            <span><i class="fas fa-clock"></i> <span id="timer">02:00</span></span>
+            <span><i class="fas fa-star"></i> <span id="score">0</span></span>
+            <span><i class="fas fa-heart"></i> <span id="lives"></span></span>
+        </div>
+        
+        <!-- Game Area (Placeholder for now) -->
+        <div id="game-area"></div>
+
+        <!-- Pause Menu -->
+        <div id="pause-menu" class="hidden">
+            <button id="continue">Continue</button>
+            <button id="restart">Restart</button>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #222;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#game-container {
+    position: relative;
+    width: 90vw;
+    max-width: 800px;
+    height: 100vh;
+    max-height: 720px;
+    background-color: #333;
+    border: 3px solid #555;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Scoreboard + Pause Menu */
+#scoreboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-size: 1.2rem;
+}
+
+#scoreboard span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pause-menu {
+    display: flex;
+    gap: 10px;
+}
+
+#pause-menu button {
+    padding: 5px 15px;
+    font-size: 1rem;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#pause-menu button:hover {
+    background-color: #666;
+}
+
+#game-area {
+    position: relative;
+    width: 616px;  /* 13 columns * 32px */
+    height: 552px; /* 11 rows * 32px */
+    margin: 0 auto;
+}
+
+
+#game-area .game-row {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+#game-area .game-row img {
+    display: block; 
+    margin: 0;
+    width: 70px;
+}
+
+#game-area .game-row .door{
+    width: 47.39px;
+    height: 47.39px;
+}
+
+
+.hidden {
+    display: none;
+}
+
+
+
+/* Responsive */
+@media (max-width: 600px) {
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+    }
+
+    #scoreboard {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
