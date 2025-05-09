@@ -1,30 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Classic Bomberman game reimagined for web browsers">
     <title>Bomberman Game</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="ressources/logo.png" type="image/png">
 </head>
+
 <body>
     <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="screen-content">
+                <h1>BOMBERMAN</h1>
+                <button id="start-btn" class="game-btn">Start Game</button>
+                <button id="instructions-btn" class="game-btn">How to Play</button>
+            </div>
+        </div>
+
+        <!-- Instructions Screen -->
+        <div id="instructions-screen" class="screen hidden">
+            <div class="screen-content">
+                <h2>How to Play</h2>
+                <div class="instructions">
+                    <p><i class="fas fa-arrows"></i>or WASD to move</p>
+                    <p><i class="fas fa-bomb"></i> Space to place bombs</p>
+                    <p><i class="fas fa-door-open"></i> Find the door to finish the level</p>
+                    <p><i class="fas fa-skull"></i> Avoid enemies and explosions</p>
+                </div>
+                <button id="back-to-start" class="game-btn">Back</button>
+            </div>
+        </div>
+
         <!-- Scoreboard -->
-        <div id="scoreboard">
-            <span><i class="fas fa-clock"></i> <span id="timer">02:00</span></span>
+        <div id="scoreboard" class="hidden">
+            <span><i class="fas fa-clock"></i> <span id="timer">2:00</span></span>
             <span><i class="fas fa-star"></i> <span id="score">0</span></span>
             <span><i class="fas fa-heart"></i> <span id="lives"></span></span>
+            <span><i class="fas fa-layer-group"></i> Level <span id="level">1</span></span>
+            <span id="sound-toggle"><i class="fas fa-volume-high"></i></span>
         </div>
-        
-        <!-- Game Area (Placeholder for now) -->
-        <div id="game-area"></div>
+
+        <!-- Game Area -->
+        <div id="game-area" class="hidden" aria-label="Bomberman game area" tabindex="0"></div>
+
+        <!-- Power-ups Display -->
+        <div id="power-ups" class="hidden">
+            <div id="bomb-count"><i class="fas fa-bomb"></i> <span>1</span></div>
+            <div id="bomb-range"><i class="fas fa-fire"></i> <span>1</span></div>
+            <div id="speed"><i class="fas fa-person-running"></i> <span>1</span></div>
+        </div>
 
         <!-- Pause Menu -->
-        <div id="pause-menu" class="hidden">
-            <button id="continue">Continue</button>
-            <button id="restart">Restart</button>
+        <div id="pause-menu" class="screen hidden">
+            <div class="screen-content">
+                <h2>Game Paused</h2>
+                <button id="resume-btn" class="game-btn">Resume</button>
+                <button id="restart-btn" class="game-btn">Restart</button>
+                <button id="quit-btn" class="game-btn">Quit to Menu</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over" class="screen hidden">
+            <div class="screen-content">
+                <h2 id="end-message">Game Over</h2>
+                <div id="final-score">Score: <span>0</span></div>
+                <button id="play-again-btn" class="game-btn">Play Again</button>
+                <button id="main-menu-btn" class="game-btn">Main Menu</button>
+            </div>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div id="level-complete" class="screen hidden">
+            <div class="screen-content">
+                <h2>Level Complete!</h2>
+                <div class="level-stats">
+                    <p>Time: <span id="level-time">0:00</span></p>
+                    <p>Score: <span id="level-score">0</span></p>
+                </div>
+                <button id="next-level-btn" class="game-btn">Next Level</button>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen">
+            <div class="screen-content">
+                <h2>Loading...</h2>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Controls (only show on touch devices) -->
+        <div id="mobile-controls" class="hidden">
+            <div id="direction-pad">
+                <button id="up-btn" aria-label="Move up"><i class="fas fa-arrow-up"></i></button>
+                <button id="left-btn" aria-label="Move left"><i class="fas fa-arrow-left"></i></button>
+                <button id="right-btn" aria-label="Move right"><i class="fas fa-arrow-right"></i></button>
+                <button id="down-btn" aria-label="Move down"><i class="fas fa-arrow-down"></i></button>
+            </div>
+            <button id="bomb-btn" aria-label="Place bomb"><i class="fas fa-bomb"></i></button>
         </div>
     </div>
+
     <script type="module" src="script.js"></script>
 </body>
+
 </html>

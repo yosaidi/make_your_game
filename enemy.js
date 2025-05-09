@@ -1,7 +1,12 @@
+// Enemy.js
 import { CELL_SIZE } from "./script.js";
 
+// Global variable for enemy placement
+let choosedIndex = new Set();
+
 export class Enemy {
-  constructor() {
+  constructor(game) {
+    this.game = game;
     const div = document.createElement("div");
     this.element = div;
     const style = div.style;
@@ -17,14 +22,14 @@ export class Enemy {
     const rightSideFloors = floors.filter(floor => {
       const y = parseInt(floor.getAttribute("data-y"));
       return y >= 6;
-    });    
+    });
     let randomIndex = Math.floor(Math.random() * rightSideFloors.length);
     while (choosedIndex.has(randomIndex)) {
       randomIndex++;
     }
     choosedIndex.add(randomIndex)
     const choosedFloor = rightSideFloors[randomIndex];
-    
+
     choosedFloor.onload = () => {
       style.left = `${choosedFloor.offsetLeft}px`;
       style.top = `${choosedFloor.offsetTop}px`;
@@ -41,16 +46,45 @@ export class Enemy {
     this.directionY = 0;
     this.translate = { x: 0, y: 0 };
     this.isDying = false;
+    this.movementActive = false;
+    this.animationActive = false;
 
     setTimeout(() => {
-      requestAnimationFrame(() => this.moveRandomly());
-      requestAnimationFrame((timestamp) => this.animateSprite(timestamp));
+      this.startMovement();
+      this.startAnimation();
     }, 1000);
   }
 
+  startMovement() {
+    if (!this.movementActive) {
+      this.movementActive = true;
+      requestAnimationFrame(() => this.moveRandomly());
+    }
+  }
+
+  stopMovement() {
+    this.movementActive = false;
+  }
+
+  startAnimation() {
+    if (!this.animationActive) {
+      this.animationActive = true;
+      this.lastFrameTime = performance.now();
+      requestAnimationFrame((timestamp) => this.animateSprite(timestamp));
+    }
+  }
+
+  stopAnimation() {
+    this.animationActive = false;
+  }
+
   async moveRandomly() {
-    if (this.isDying) return; // Don't move if dying
-    
+    if (this.game.paused || this.isDying) {
+      // Pause movement but keep the flag so we can resume
+      this.movementActive = false;
+      return;
+    }
+
     const nextPoint = {
       x: this.x,
       y: this.y,
@@ -72,11 +106,18 @@ export class Enemy {
       this.x = nextPoint.x
       this.y = nextPoint.y
     }
-    requestAnimationFrame(() => this.moveRandomly());
+    
+    // Only continue the loop if we're still active
+    if (this.movementActive) {
+      requestAnimationFrame(() => this.moveRandomly());
+    }
   }
 
   playEnemyDeath() {
     this.isDying = true;
+    this.stopMovement();
+    this.stopAnimation();
+    
     const deathRow = 4; // 5th row (0-based index)
     const frameCount = 8; // 8 frames in death animation
     const frameWidth = 40; // Width of each frame
@@ -117,8 +158,8 @@ export class Enemy {
   }
 
   step(distanceSign, direction) {
-    if (this.isDying) return Promise.resolve(); // Don't move if dying
-    
+    if (this.game.paused || this.isDying) return Promise.resolve(); // Don't move if dying
+
     const duration = 600;
     const startValue = this.translate[direction] || 0;
     const startTime = performance.now();
@@ -161,8 +202,12 @@ export class Enemy {
   }
 
   animateSprite = (timestamp) => {
-    if (this.isDying) return; // Don't animate if dying
-    
+    if (this.game.paused || this.isDying) {
+      // Pause animation but keep the flag so we can resume
+      this.animationActive = false;
+      return;
+    }
+
     if (!this.lastFrameTime) this.lastFrameTime = timestamp;
     const elapsed = timestamp - this.lastFrameTime;
 
@@ -172,15 +217,38 @@ export class Enemy {
       this.lastFrameTime = timestamp;
     }
 
-    requestAnimationFrame((timestamp) => this.animateSprite(timestamp));
+    // Only continue the animation if we're still active
+    if (this.animationActive) {
+      requestAnimationFrame((timestamp) => this.animateSprite(timestamp));
+    }
   };
 
   destroy() {
+    this.stopMovement();
+    this.stopAnimation();
     if (this.element && this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
   }
-}
 
-// Global variable for enemy placement
-let choosedIndex = new Set();
+  // Add this method to your Game class to call on enemies when resuming
+  resume() {
+    if (!this.isDying && !this.movementActive) {
+      this.startMovement();
+      this.startAnimation();
+    }
+  }
+
+  move() {
+    // This method exists just to satisfy the loop call
+    // You can use it to monitor for pause/resume events
+    if (!this.game.paused && !this.isDying) {
+      if (!this.movementActive) {
+        this.startMovement();
+      }
+      if (!this.animationActive) {
+        this.startAnimation();
+      }
+    }
+  }
+}
