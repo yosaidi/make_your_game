@@ -174,7 +174,7 @@ export class Character {
             this.element.style.backgroundPositionX = "0px";
         }
 
-        this.animationFrame = requestAnimationFrame((ts) => this.animateSprite(ts));
+      requestAnimationFrame((ts) => this.animateSprite(ts));
     }
 
     playDeathAnimation() {
